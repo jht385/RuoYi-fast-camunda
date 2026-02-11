@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>流程图</title>
+  <th:block th:include="include :: header('流程图')" />
+  <link th:href="@{/css/diagram-js.css}" rel="stylesheet" />
+  <link th:href="@{/css/bpmn.css}" rel="stylesheet" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif
+    }
+
+    #toolbar {
+      display: flex;
+      align-items: center;
+      padding: 6px 12px;
+      background: #fafafa;
+      border-bottom: 1px solid #ccc;
+      gap: 8px;
+    }
+
+    #canvas {
+      height: calc(100% - 41px)
+    }
+
+    .highlight-finished:not(.djs-connection) .djs-visual> :nth-child(1) {
+      fill: #d3d3d3 !important;
+      stroke: #808080 !important;
+    }
+
+    .highlight-active:not(.djs-connection) .djs-visual> :nth-child(1) {
+      fill: #ff4d4f !important;
+      stroke: #cf1322 !important;
+    }
+
+    .badge {
+      background: rgba(255, 77, 79, .9);
+      color: #fff;
+      font-size: 11px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      border: 1px solid #fff;
+      box-shadow: 0 0 2px rgba(0, 0, 0, .3);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="canvas"></div>
+
+  <div th:include="include :: footer"></div>
+  <script th:src="@{/js/bpmn-viewer.production.min.js}"></script>
+  <script>
+    var
+      action = "[[${action}]]",
+      procdefId = "[[${procdefId}]]",
+      procInstId = "[[${procInstId}]]"
+      ;
+
+    const viewer = new BpmnJS({ container: '#canvas' });
+
+    if (action === 'viewDefinitionImg') {
+      $.get(ctx + `definition/${procdefId}/xml`, function (res) {
+        if (res.code === 0) {
+          const bpmn20Xml = res.data.bpmn20Xml;
+          viewer.clear();
+          viewer.importXML(bpmn20Xml).then(function () {
+            viewer.get('canvas').zoom('fit-viewport');
+          }).catch(function (err) {
+            console.error('导入流程图失败:', err);
+          });
+        }
+      });
+    } else if (action === 'viewProcessingImg') {
+      $.get(ctx + `process/getHistoryView?procInstId=${procInstId}`, function (res) {
+        if (res.code === 0) {
+          const data = res.data;
+
+          const { bpmn20Xml, finishedActivityIds, activeActivityIds } = data;
+
+          viewer.importXML(bpmn20Xml).then(result => {
+            viewer.get('canvas').zoom('fit-viewport');
+
+            const canvas = viewer.get('canvas');
+            const overlays = viewer.get('overlays');
+            const eleReg = viewer.get('elementRegistry');
+
+            finishedActivityIds.forEach(id => {
+              const ele = eleReg.get(id);
+              if (ele) canvas.addMarker(id, 'highlight-finished');
+            });
+
+            activeActivityIds.forEach(id => {
+              const ele = eleReg.get(id);
+              if (ele) {
+                canvas.addMarker(id, 'highlight-active');
+                overlays.add(id, {
+                  position: { top: -20, left: 0 },
+                  html: '<div class="badge">运行中</div>'
+                });
+              }
+            });
+
+          }).catch(function (err) {
+            console.error('导入流程图失败:', err);
+          });
+        }
+      });
+    }
+
+
+  </script>
+</body>
+
+</html>

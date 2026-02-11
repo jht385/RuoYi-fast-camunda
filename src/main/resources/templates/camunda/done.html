@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+	<th:block th:include="include :: header('已办')" />
+	<th:block th:include="include :: select2-css" />
+</head>
+
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								<p>实例id：</p>
+								<input type="text" name="procInstId" />
+							</li>
+							<li>
+								<p>任务名称：</p>
+								<input type="text" name="processInstanceName" placeholder="模糊查询" />
+							</li>
+							<li>
+								<label>流程类型：</label>
+								<select name="procDefKey" th:with="ptl=${processTypeList}" class="form-control">
+									<option value="">所有</option>
+									<option th:each="pt : ${ptl}" th:text="${pt.NAME_}" th:value="${pt.KEY_}"></option>
+								</select>
+							</li>
+							<li class="select-time">
+								<label>发起时间： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"
+									autocomplete="off" />
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"
+									autocomplete="off" />
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+										class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+										class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="btn-group-sm" id="toolbar" role="group">
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" style="word-break:break-all; word-wrap:break-all;"></table>
+			</div>
+		</div>
+	</div>
+
+	<div th:include="include :: footer"></div>
+	<th:block th:include="include :: select2-js" />
+	<script th:src="@{/js/camunda.js}"></script>
+	<script th:inline="javascript">
+		var techRole = [[${@permission.hasRole('ceo') }]];
+		var curUserId = [[${@permission.getPrincipalProperty('userId') }]];
+
+		$(function () {
+			var options = {
+				url: ctx + "process/doneList",
+				modalName: "流程定义",
+				showColumns: false,
+				columns: [
+					{ checkbox: true },
+					{ field: 'procInstId', title: '实例id' },
+					{
+						field: 'taskStartTimeOverDay', title: '节点超时天数',
+						formatter: function (value, row, index) {
+							if (!row.endTime) {
+								return value;
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ field: 'processInstanceName', title: '任务名称' },
+					{ field: 'procDefName', title: '流程类型' },
+					{
+						field: 'taskName', title: '进度', formatter: function (value, row, index) {
+							let str = '';
+							let text = '';
+							if (!!row.endTime) {
+								text = '结束于：' + row.endTime, 'red';
+							} else {
+								text = row.taskName;
+							}
+							return `<a href="javascript:void(0)" onclick="viewProcessingImg('${row.procInstId}')">${text}</a>`;
+						}
+					},
+					{ field: 'startTime', title: '发起时间' },
+					{
+						title: '操作', align: 'center',
+						formatter: function (value, row, index) {
+							var actions = [];
+							actions.push(`<a class="btn btn-success btn-xs" href="javascript:void(0)"
+									onclick="viewDetail('${row.formKey}','${row.businessKey}','${row.taskId}','${row.taskDefKey}','view','${row.processInstanceName}')">
+									<i class="fa fa-edit"></i> 查看</a> `);
+
+							let canEdit = techRole;
+							if (curUserId === 1) { // 管理员
+								canEdit = '';
+							}
+
+							actions.push(`<a class="btn btn-danger btn-xs ${canEdit}" href="javascript:void(0)" 
+								onclick="editDetail('${row.formKey}','${row.businessKey}','${row.taskId}','${row.taskDefKey}','edit','${row.processInstanceName}')">
+								<i class="fa fa-edit"></i> 编辑</a> `);
+							return actions.join('');
+						}
+					}
+				]
+			};
+			$.table.init(options);
+		});
+
+		function viewDetail(formKey, businessKey, taskId, node, action, name) {
+			var url = `${formKey}?processId=${businessKey}&taskId=${taskId}&node=${node}&action=${action}`;
+
+			top.layer.open({
+				type: 2,
+				area: [window.innerWidth + 'px', window.innerHeight + 'px'],
+				fix: false, maxmin: true, shade: 0.3,
+				title: name,
+				content: url,
+				btn: ['关闭'],
+				shadeClose: false,
+				yes: function (index, layero) {
+					top.layer.close(index);
+				},
+				success: function () {
+					$(':focus').blur();
+				}
+			});
+		}
+
+		function editDetail(formKey, businessKey, taskId, node, action, name) {
+			var url = `${formKey}?processId=${businessKey}&taskId=${taskId}&node=${node}&action=${action}`;
+
+			top.layer.open({
+				type: 2,
+				area: [window.innerWidth + 'px', window.innerHeight + 'px'],
+				fix: false, maxmin: true, shade: 0.3,
+				title: name,
+				content: url,
+				btn: ['确定', '关闭'],
+				shadeClose: false,
+				yes: function (index, layero) {
+					var iframeWin = layero.find('iframe')[0];
+					iframeWin.contentWindow.submitHandler(index, layero);
+				},
+				cancel: function (index) {
+					return true;
+				},
+				success: function () {
+					$(':focus').blur();
+				}
+			});
+		}
+
+	</script>
+</body>
+
+</html>

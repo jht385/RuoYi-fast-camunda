@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+	<th:block th:include="include :: header('流程定义')" />
+	<th:block th:include="include :: jasny-bootstrap-css" />
+</head>
+
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								<p>流程KEY：</p>
+								<input type="text" name="key" />
+							</li>
+							<li>
+								<p>名称：</p>
+								<input type="text" name="name" />
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+										class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+										class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="btn-group-sm" id="toolbar" role="group">
+				<div id="processDefinitionDiv" class="fileinput fileinput-new" data-provides="fileinput"
+					style="margin-bottom: 0; margin-right: -3px;">
+					<span class="btn btn-success btn-file" style="font-size: 12px;">
+						<span><i class="fa fa-upload"></i> 部署流程</span>
+						<input type="file" name="processDefinition" accept=".bpmn,.zip">
+					</span>
+					<span class="fileinput-filename"></span>
+					<a href="javascript:;" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+				</div>
+				<span class="btn btn-success" style="font-size: 12px;" th:onclick="window.open([[${bpmnOnlineUrl}]], '_blank')">
+					<i class="fa fa-edit"></i> 编辑流程
+				</span>
+				<span class="btn btn-success" style="font-size: 12px;" onclick="window.open('camunda/designer', '_blank')">
+					<i class="fa fa-edit"></i> 本地设计器(玩具)
+				</span>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" style="word-break:break-all; word-wrap:break-all;"></table>
+			</div>
+		</div>
+	</div>
+
+	<div th:include="include :: footer"></div>
+	<th:block th:include="include :: jasny-bootstrap-js" />
+	<script th:src="@{/js/camunda.js}"></script>
+	<script th:inline="javascript">
+		var prefix = ctx + "definition";
+
+		$(function () {
+			var options = {
+				url: prefix + "/list",
+				removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+				modalName: "流程定义",
+				uniqueId: "deploymentId",
+				columns: [
+					{ checkbox: true },
+					{ field: 'id', title: '定义ID' },
+					{ field: 'key', title: '流程KEY' },
+					{ field: 'name', title: '流程名称' },
+					{ field: 'version', title: '版本' },
+					{ field: 'description', title: '流程描述' },
+					{ field: 'deploymentTime', title: '部署时间' },
+					{
+						field: 'resourceName', align: 'center', title: '流程定义文件',
+						formatter: function (value, row, index) {
+							return `<a href="${ctx}definition/readResource?processDefinitionId=${row.id}&resourceName=${value}" target="_blank">查看</a>`;
+						}
+					},
+					{
+						field: 'diagramResourceName', align: 'center', title: '流程图',
+						formatter: function (value, row, index) {
+							return `<a href="javascript:void(0)" onclick="viewDefinitionImg('${row.id}')">${row.key}.png</a>`;
+						}
+					},
+					{
+						field: 'suspendState', align: 'center', title: '流程定义状态',
+						formatter: function (value, row, index) {
+							let str = '';
+							if (value === '2') {
+								str = '<span class="badge badge-primary">已挂起</span>';
+							} else if (value === '1') {
+								str = '<span class="badge badge-primary">已激活</span>';
+							} else {
+								str = '<span class="badge badge-primary">已激活</span>';
+							}
+							return str;
+						}
+					},
+					{
+						title: '操作', align: 'center',
+						formatter: function (value, row, index) {
+							var actions = [];
+							var suspendOrActive = row.suspendState === '2' ? '激活' : '挂起';
+							var icon = row.suspendState === '2' ? 'fa fa-check' : 'fa fa-stop';
+							actions.push(`<a class="btn btn-warning btn-xs" href="javascript:void(0)"
+								onclick="suspendOrActiveApply('${row.id}','${row.suspendState}')"><i class="${icon}"></i> ${suspendOrActive}</a> `);
+							actions.push(`<a class="btn btn-danger btn-xs" href="javascript:void(0)"
+								onclick="$.operate.remove('${row.deploymentId}')"><i class="fa fa-remove"></i> 删除</a> `);
+							return actions.join('');
+						}
+					}
+				]
+			};
+			$.table.init(options);
+
+			initProcessDefinitionFileInput();
+		});
+
+		function initProcessDefinitionFileInput() {
+			$('#processDefinitionDiv').on('change.bs.fileinput', function (e) {
+				var file = $('input[type=file]')[0].files[0];
+
+				var fileName = file.name;
+				var fileExt = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+
+				if (fileExt !== '.bpmn' && fileExt !== '.zip') {
+					$.modal.alertWarning("只能上传 .bpmn .zip 格式的文件！");
+					$('#processDefinitionDiv').fileinput('reset'); // 重置
+					return;
+				}
+
+				var formdata = new FormData();
+				formdata.append("processDefinition", $('input[type=file]')[0].files[0]);
+				$.ajax({
+					url: prefix + '/upload',
+					data: formdata,
+					type: "post",
+					processData: false,
+					contentType: false,
+					success: function (result) {
+						$('#processDefinitionDiv').fileinput('reset');     // 重置
+						$.operate.ajaxSuccess(result);
+					}
+				})
+			});
+		}
+
+		function suspendOrActiveApply(id, suspendState) {
+			var suspendOrActive = suspendState === '2' ? '激活' : '挂起';
+			$.modal.confirm("确认要" + suspendOrActive + "流程定义吗?", function () {
+				var url = ctx + "definition/suspendOrActiveApply";
+				var data = { "id": id, "suspendState": suspendState };
+				$.operate.submit(url, "post", "json", data);
+			});
+		}
+
+	</script>
+</body>
+
+</html>

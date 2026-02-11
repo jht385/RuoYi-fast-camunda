@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.camunda.mapper.ProcessMapper">
+
+    <resultMap type="TaskVO" id="TaskResult">
+        <id property="taskId" column="ID_" />
+        <result property="executionId" column="EXECUTION_ID_" />
+        <result property="procInstId" column="PROC_INST_ID_" />
+        <result property="procDefId" column="PROC_DEF_ID_" />
+        <result property="taskName" column="NAME_" />
+        <result property="description" column="DESCRIPTION_" />
+        <result property="taskDefKey" column="TASK_DEF_KEY_" />
+        <result property="priority" column="PRIORITY_" />
+        <result property="createTime" column="CREATE_TIME_" />
+        <result property="taskStartTimeOverDay" column="taskStartTimeOverDay" />
+        <result property="suspensionState" column="SUSPENSION_STATE_" />
+        <result property="processInstanceName" column="processInstanceName" />
+        <result property="procDefName" column="procDefName" />
+        <result property="procDefKey" column="procDefKey" />
+        <result property="startTime" column="START_TIME_" />
+        <result property="businessKey" column="BUSINESS_KEY_" />
+    </resultMap>
+
+    <sql id="todoListVo">
+        SELECT t1.ID_, t1.EXECUTION_ID_, t1.PROC_INST_ID_, t1.PROC_DEF_ID_, t1.NAME_,
+            t1.TASK_DEF_KEY_, t1.PRIORITY_, t1.CREATE_TIME_, DATEDIFF(CURDATE(), t1.CREATE_TIME_) 'taskStartTimeOverDay',
+            t1.SUSPENSION_STATE_,
+            t2.TEXT_ processInstanceName,
+            t3.NAME_ procDefName, t3.KEY_ procDefKey,
+            t4.START_TIME_, t4.BUSINESS_KEY_
+    </sql>
+
+    <sql id="taskDetailColumns">
+        , t1.DESCRIPTION_
+    </sql>
+
+    <select id="todoList" parameterType="TaskVO" resultMap="TaskResult">
+        <include refid="todoListVo"/>
+        FROM act_ru_task t1
+        <choose>
+            <when test="isAdmin == true">
+            </when>
+            <otherwise>
+                INNER JOIN act_ru_identitylink ari ON t1.ID_ = ari.TASK_ID_
+                AND (
+                    EXISTS (
+                        SELECT 1 FROM sys_user_role sur 
+                        WHERE sur.user_id = #{userId} 
+                        AND sur.role_id = ari.GROUP_ID_
+                    )
+                    OR ari.USER_ID_ = #{userId}
+                )
+            </otherwise>
+        </choose>
+        LEFT JOIN act_hi_varinst t2 ON t2.NAME_ = 'processInstanceName' AND t2.EXECUTION_ID_ = t1.EXECUTION_ID_
+        LEFT JOIN act_re_procdef t3 ON t1.PROC_DEF_ID_ = t3.ID_
+        left join act_hi_procinst t4 on t1.PROC_INST_ID_ = t4.PROC_INST_ID_
+        <where>
+            t1.SUSPENSION_STATE_ = 1
+            <if test="processInstanceName != null and processInstanceName != ''"> AND t2.TEXT_ LIKE CONCAT('%', #{processInstanceName}, '%') </if>
+            <if test="procDefKey != null and procDefKey != ''"> AND t3.KEY_ = #{procDefKey} </if>
+        </where>
+    </select>
+
+    <select id="selectTaskById" parameterType="Long" resultMap="TaskResult">
+        <include refid="todoListVo"/>
+        <include refid="taskDetailColumns"/>
+        FROM act_ru_task t1
+            LEFT JOIN act_hi_varinst t2 ON t2.NAME_ = 'processInstanceName' AND t2.EXECUTION_ID_ = t1.EXECUTION_ID_
+            LEFT JOIN act_re_procdef t3 ON t1.PROC_DEF_ID_ = t3.ID_
+		where t1.ID_ = #{taskId}
+    </select>
+
+    <resultMap type="ProcinstVO" id="ProcinstResult">
+        <id property="id" column="ID_" />
+        <result property="procInstId" column="PROC_INST_ID_" />
+        <result property="businessKey" column="BUSINESS_KEY_" />
+        <result property="procDefKey" column="PROC_DEF_KEY_" />
+        <result property="procDefId" column="PROC_DEF_ID_" />
+        <result property="startTime" column="START_TIME_" />
+        <result property="endTime" column="END_TIME_" />
+        <result property="processInstanceName" column="processInstanceName" />
+        <result property="taskId" column="taskId" />
+        <result property="taskName" column="taskName" />
+        <result property="taskStartTimeOverDay" column="taskStartTimeOverDay" />
+        <result property="taskDefKey" column="TASK_DEF_KEY_" />
+        <result property="procDefName" column="procDefName" />
+        <result property="deploymentId" column="DEPLOYMENT_ID_" />
+    </resultMap>
+
+    <select id="doneList" parameterType="ProcinstVO" resultMap="ProcinstResult">
+        select t1.ID_, t1.PROC_INST_ID_, t1.BUSINESS_KEY_, t1.PROC_DEF_KEY_, t1.PROC_DEF_ID_, t1.START_TIME_, t1.END_TIME_,
+            t2.TEXT_ 'processInstanceName',
+            t3.ID_ 'taskId', t3.NAME_ 'taskName', DATEDIFF(CURDATE(), t3.START_TIME_) 'taskStartTimeOverDay', t3.TASK_DEF_KEY_,
+            t4.NAME_ 'procDefName', t4.DEPLOYMENT_ID_
+        from act_hi_procinst t1
+            left join act_hi_varinst t2 on t2.NAME_ = 'processInstanceName' and t1.PROC_INST_ID_ = t2.PROC_INST_ID_
+            left join (
+                    select ID_, TASK_DEF_KEY_, PROC_INST_ID_, NAME_, START_TIME_
+                    from (
+                            select ID_, TASK_DEF_KEY_, PROC_INST_ID_, NAME_, START_TIME_,
+                                        @rn := if(@prev = PROC_INST_ID_, @rn + 1, 1) as rn,
+                                        @prev := PROC_INST_ID_
+                            from act_hi_taskinst
+                            cross join (select @rn := 0, @prev := null) vars
+                            order by PROC_INST_ID_, START_TIME_ desc, ID_ desc
+                    ) t
+                    where rn = 1
+            ) t3 on t1.PROC_INST_ID_ = t3.PROC_INST_ID_
+            left join act_re_procdef t4 on t1.PROC_DEF_ID_ = t4.ID_
+        where 1=1
+            <if test="userId != null and userId != ''">
+                and exists (
+                    select 1
+                    from act_hi_actinst a
+                    where a.PROC_INST_ID_ = t1.PROC_INST_ID_
+                        and a.ASSIGNEE_ = #{userId}
+                        and a.END_TIME_ is not null
+                )
+            </if>
+            <if test="procInstId != null and procInstId != ''"> and t1.PROC_INST_ID_ = #{procInstId} </if>
+            <if test="processInstanceName != null and processInstanceName != ''"> and t2.TEXT_ like concat('%', #{processInstanceName}, '%') </if>
+            <if test="procDefKey != null and procDefKey != ''"> and t1.PROC_DEF_KEY_ = #{procDefKey} </if>
+            <if test="params.beginTime != null and params.beginTime != ''">
+                AND date_format(t1.START_TIME_,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                AND date_format(t1.START_TIME_,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+	<th:block th:include="include :: header('待办')" />
+</head>
+
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								<p>名称：</p>
+								<input type="text" name="processInstanceName" />
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+										class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+										class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="col-sm-12 select-table table-striped">
+				<table id="taskTable"></table>
+			</div>
+		</div>
+	</div>
+
+	<div th:include="include :: footer"></div>
+	<script th:src="@{/js/camunda.js}"></script>
+	<script th:inline="javascript">
+		var prefix = ctx + "process";
+
+		$(function () {
+			var options = {
+				id: 'taskTable',
+				url: prefix + "/todoList",
+				modalName: "代办任务",
+				showColumns: false,
+				sortName: "t4.startTime_", sortOrder: "desc",
+				columns: [
+					{ checkbox: true },
+					{ field: 'procInstId', title: '实例id' },
+					{ field: 'taskStartTimeOverDay', title: '节点超时天数' },
+					{ field: 'processInstanceName', title: '名称' },
+					{ field: 'procDefName', title: '流程类型' },
+					{
+						field: 'taskName', title: '进度', formatter: function (value, row, index) {
+							return `<a href="javascript:void(0)" onclick="viewProcessingImg('${row.procInstId}')">${row.taskName}</a>`;
+						}
+					},
+					{ field: 'startTime', title: '发起时间' },
+					{
+						title: '操作',
+						align: 'center',
+						formatter: function (value, row, index) {
+							var actions = [];
+							actions.push(`<a class="btn btn-success btn-xs" href="javascript:void(0)"
+									onclick="handleDetail('${row.taskFormKey}','${row.businessKey}','${row.taskId}','${row.taskDefKey}','handle','${row.processInstanceName}')">
+									<i class="fa fa-edit"></i> 办理</a> `);
+							return actions.join('');
+						}
+					}
+				]
+			};
+			$.table.init(options);
+		});
+
+		function handleDetail(formKey, businessKey, taskId, node, action, name) {
+			var url = `${formKey}?processId=${businessKey}&taskId=${taskId}&node=${node}&action=${action}`;
+
+			top.layer.open({
+				type: 2,
+				area: [window.innerWidth + 'px', window.innerHeight + 'px'],
+				fix: false, maxmin: true, shade: 0.3,
+				title: name,
+				content: url,
+				btn: ['确定', '暂存', '关闭'],
+				shadeClose: false,
+				yes: function (index, layero) {
+					var iframeWin = layero.find('iframe')[0];
+					iframeWin.contentWindow.submitHandler(index, layero);
+				},
+				btn2: function (index, layero) {
+					var iframeWin = layero.find('iframe')[0];
+					iframeWin.contentWindow.draft(index, layero);
+				},
+				cancel: function (index) {
+					return true;
+				},
+				success: function () {
+					$(':focus').blur();
+				}
+			});
+		}
+
+	</script>
+</body>
+
+</html>

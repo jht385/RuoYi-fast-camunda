@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.camunda.mapper.ProcessDefinitionMapper">
+
+    <resultMap type="ProcessDefinitionEx" id="ProcessDefinitionResult">
+        <id property="id" column="ID_" />
+        <result property="category" column="CATEGORY_" />
+        <result property="name" column="NAME_" />
+        <result property="key" column="KEY_" />
+        <result property="version" column="VERSION_" />
+        <result property="deploymentId" column="DEPLOYMENT_ID_" />
+        <result property="resourceName" column="RESOURCE_NAME_" />
+        <result property="diagramResourceName" column="DGRM_RESOURCE_NAME_" />
+        <result property="suspendState" column="SUSPENSION_STATE_" />
+        <result property="deploymentTime" column="DEPLOY_TIME_" />
+        <result property="flag" column="flag"/>
+    </resultMap>
+
+    <sql id="selectProcessDefinitionVo">
+        select t1.ID_, t1.CATEGORY_, t1.NAME_, t1.KEY_, t1.VERSION_, t1.DEPLOYMENT_ID_, t1.RESOURCE_NAME_,
+            t1.DGRM_RESOURCE_NAME_, t1.SUSPENSION_STATE_,
+	        t2.DEPLOY_TIME_
+        from act_re_procdef t1
+            left join act_re_deployment t2 on t1.DEPLOYMENT_ID_ = t2.ID_
+    </sql>
+
+    <select id="selectProcessDefinitionList" parameterType="ProcessDefinitionEx" resultMap="ProcessDefinitionResult">
+        <include refid="selectProcessDefinitionVo"/>
+        <where>
+            <if test="name != null and name != ''">
+				AND t1.NAME_ like concat(#{name}, '%')
+            </if>
+            <if test="key != null and key != ''">
+				AND t1.KEY_ like concat(#{key}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectProcessDefinitionById" parameterType="Long" resultMap="ProcessDefinitionResult">
+        <include refid="selectProcessDefinitionVo"/>
+		where t1.ID_ = #{id}
+    </select>
+
+    <select id="selectProcdefKey" parameterType="Long" resultMap="ProcessDefinitionResult">
+        SELECT DISTINCT 
+            t1.KEY_, 
+            t1.NAME_,
+        <if test="roleId != null">
+            !ISNULL(t2.id) AS flag
+        </if>
+        <if test="roleId == null">
+            0 AS flag
+        </if>
+        FROM act_re_procdef t1
+        <if test="roleId != null">
+            LEFT JOIN sys_role_procdef t2 ON t1.KEY_ = t2.procdef_key AND t2.role_id = #{roleId}
+        </if>
+        ORDER BY t1.KEY_
+    </select>
+
+    <insert id="batchProcdefKey">
+        INSERT INTO sys_role_procdef (id, role_id, procdef_key)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.roleId}, #{item.procdefKey})
+        </foreach>
+    </insert>
+
+    <delete id="deleteProcdefKeyByRoleId" parameterType="Long">
+		delete from sys_role_procdef where role_id=#{roleId}
+    </delete>
+
+    <select id="selectProcdefKeysByUserId" parameterType="Long" resultType="String">
+        SELECT DISTINCT procdef_key 
+        FROM sys_role_procdef 
+        WHERE role_id IN (
+            SELECT role_id 
+            FROM sys_user_role 
+            WHERE user_id = #{userId}
+        )
+        ORDER BY procdef_key
+    </select>
+
+</mapper>

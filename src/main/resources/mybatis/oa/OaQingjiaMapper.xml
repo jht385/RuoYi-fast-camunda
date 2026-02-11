@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.oa.qingjia.mapper.OaQingjiaMapper">
+    
+    <resultMap type="OaQingjia" id="OaQingjiaResult">
+        <result property="id"    column="id"    />
+        <result property="procInstId"    column="proc_inst_id"    />
+        <result property="status"    column="status"    />
+        <result property="name"    column="name"    />
+        <result property="day"    column="day"    />
+        <result property="quitDate"    column="quit_date"    />
+        <result property="reason"    column="reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectOaQingjiaVo">
+        select id, proc_inst_id, status, name, day, quit_date, reason, create_by, create_time, update_by, update_time from oa_qingjia
+    </sql>
+
+    <select id="selectOaQingjiaList" parameterType="OaQingjia" resultMap="OaQingjiaResult">
+        <include refid="selectOaQingjiaVo"/>
+        <where>  
+            <if test="procInstId != null  and procInstId != ''"> and proc_inst_id = #{procInstId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="day != null "> and day = #{day}</if>
+            <if test="quitDate != null "> and quit_date = #{quitDate}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+        </where>
+    </select>
+    
+    <select id="selectOaQingjiaById" parameterType="String" resultMap="OaQingjiaResult">
+        <include refid="selectOaQingjiaVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertOaQingjia" parameterType="OaQingjia">
+        insert into oa_qingjia
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="procInstId != null">proc_inst_id,</if>
+            <if test="status != null">status,</if>
+            <if test="name != null">name,</if>
+            <if test="day != null">day,</if>
+            <if test="quitDate != null">quit_date,</if>
+            <if test="reason != null">reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="procInstId != null">#{procInstId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="name != null">#{name},</if>
+            <if test="day != null">#{day},</if>
+            <if test="quitDate != null">#{quitDate},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOaQingjia" parameterType="OaQingjia">
+        update oa_qingjia
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="procInstId != null">proc_inst_id = #{procInstId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="day != null">day = #{day},</if>
+            <if test="quitDate != null">quit_date = #{quitDate},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOaQingjiaById" parameterType="String">
+        delete from oa_qingjia where id = #{id}
+    </delete>
+
+    <delete id="deleteOaQingjiaByIds" parameterType="String">
+        delete from oa_qingjia where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
