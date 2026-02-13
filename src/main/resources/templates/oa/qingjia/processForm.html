@@ -26,18 +26,18 @@
         <label class="col-sm-1 control-label">名称：</label>
         <div class="col-sm-3">
           <input name="name" class="form-control m-b" type="text" autocomplete="off"
-            th:readonly="${node != 'n3' and action != 'edit'}" th:value="${ beanInfo != null ? beanInfo.name : '请假'}">
+            th:readonly="${node != 'n1' and action != 'edit'}" th:value="${ beanInfo != null ? beanInfo.name : '请假'}">
         </div>
         <label class="col-sm-1 control-label">天数：</label>
         <div class="col-sm-3">
           <input name="day" class="form-control m-b" type="number" autocomplete="off"
-            th:readonly="${node != 'n3' and action != 'edit'}" th:value="${ beanInfo != null ? beanInfo.day : ''}">
+            th:readonly="${node != 'n1' and action != 'edit'}" th:value="${ beanInfo != null ? beanInfo.day : ''}">
         </div>
         <label class="col-sm-1 control-label">离开时间：</label>
         <div class="col-sm-3">
           <div class="input-group date">
             <input name="quitDate" class="form-control" placeholder="yyyy-MM-dd" type="text"
-              th:readonly="${node != 'n3' and action != 'edit'}"
+              th:readonly="${node != 'n1' and action != 'edit'}"
               th:value="${#dates.format(beanInfo != null ? beanInfo.quitDate : quitDate, 'yyyy-MM-dd')}">
             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
           </div>
@@ -46,7 +46,7 @@
       <div class="form-group">
         <label class="col-sm-1 control-label">原因：</label>
         <div class="col-sm-11">
-          <textarea name="reason" class="form-control m-b" rows="5" th:readonly="${node != 'n3' and action != 'edit'}"
+          <textarea name="reason" class="form-control m-b" rows="5" th:readonly="${node != 'n1' and action != 'edit'}"
             th:text="${ beanInfo != null ? beanInfo.reason : ''}"></textarea>
         </div>
       </div>
@@ -317,7 +317,7 @@
         }
 
         /*
-        if (node === 'n3' && $('#pass:checked').val() === '2') {
+        if (node === 'n1' && $('#pass:checked').val() === '2') {
           $.modal.alertWarning('这里不能返回');
           return;
         }

@@ -41,7 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class CamundaProcessService {
     @Autowired
     private ProcessMapper processMapper;
@@ -62,14 +62,15 @@ public class CamundaProcessService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public ProcessInstance simpleStart(String applyUserId, String businessKey, String processInstanceName,
-            String processDefinitionKey, Map<String, Object> variables) {
+    public ProcessInstance simpleStart(String applyUserId, String businessKey,
+            String processInstanceName, String processDefinitionKey,
+            Map<String, Object> variables) {
         identityService.setAuthenticatedUserId(applyUserId); // identitylink表，act_ru_execution，act_hi_procinst对应列
         if (StringUtils.isNotBlank(processInstanceName)) { // 用于之后查询各种类型processDefinitionKey的业务，给个实例名查询用
             variables.put("processInstanceName", processInstanceName);
         }
-        ProcessInstance instance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey,
-                variables);
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey(processDefinitionKey,
+                businessKey, variables);
         return instance;
     }
 
@@ -98,16 +99,11 @@ public class CamundaProcessService {
         for (TaskVO taskVO : list) {
             String formKey;
 
-            formKey = formService.getTaskFormKey(
-                    taskVO.getProcDefId(),
-                    taskVO.getTaskDefKey());
+            formKey = formService.getTaskFormKey(taskVO.getProcDefId(), taskVO.getTaskDefKey());
 
             if (StringUtils.isEmpty(formKey)) {
-                formKey = formService.getStartFormKey(
-                        repositoryService.createProcessDefinitionQuery()
-                                .processDefinitionId(taskVO.getProcDefId())
-                                .singleResult()
-                                .getId());
+                formKey = formService.getStartFormKey(repositoryService.createProcessDefinitionQuery()
+                        .processDefinitionId(taskVO.getProcDefId()).singleResult().getId());
             }
 
             taskVO.setTaskFormKey(formKey);
@@ -117,10 +113,8 @@ public class CamundaProcessService {
     }
 
     public Map<String, Object> getHistoryView(String procInstId) {
-        HistoricProcessInstance instance = historyService
-                .createHistoricProcessInstanceQuery()
-                .processInstanceId(procInstId)
-                .singleResult();
+        HistoricProcessInstance instance = historyService.createHistoricProcessInstanceQuery()
+                .processInstanceId(procInstId).singleResult();
 
         if (instance == null) {
             throw new RuntimeException("实例不存在: " + procInstId);
@@ -129,12 +123,9 @@ public class CamundaProcessService {
         String definitionId = instance.getProcessDefinitionId();
         String xml = getXmlByProcessDefinitionId(definitionId);
 
-        List<HistoricActivityInstance> activities = historyService
-                .createHistoricActivityInstanceQuery()
+        List<HistoricActivityInstance> activities = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(procInstId)
-                .orderByHistoricActivityInstanceStartTime()
-                .asc()
-                .list();
+                .orderByHistoricActivityInstanceStartTime().asc().list();
 
         List<String> finishedIds = new ArrayList<>();
         List<String> activeIds = new ArrayList<>();
@@ -180,9 +171,8 @@ public class CamundaProcessService {
 
         List<HistoricActivityInstance> list = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(historicActivityVO.getProcessInstanceId())
-                .activityType("userTask")
-                .finished().orderByHistoricActivityInstanceStartTime().asc()
-                .listPage((pageNum - 1) * pageSize, pageSize);
+                .activityType("userTask").finished().orderByHistoricActivityInstanceStartTime()
+                .asc().listPage((pageNum - 1) * pageSize, pageSize);
 
         list.forEach(historicActivityInstance -> {
             HistoricActivityVO activity = new HistoricActivityVO();
@@ -191,12 +181,13 @@ public class CamundaProcessService {
 
             String taskId = historicActivityInstance.getTaskId();
             if (StringUtils.isNotEmpty(taskId)) {
-                HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery()
-                        .taskId(taskId).singleResult();
+                HistoricTaskInstance historicTaskInstance = historyService
+                        .createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
                 activity.setDescription(historicTaskInstance.getDescription());
             }
 
-            User sysUser = userMapper.selectUserById(Long.parseLong(historicActivityInstance.getAssignee()));
+            User sysUser = userMapper
+                    .selectUserById(Long.parseLong(historicActivityInstance.getAssignee()));
             if (sysUser != null) {
                 activity.setAssigneeName(sysUser.getUserName());
             }
@@ -213,11 +204,10 @@ public class CamundaProcessService {
         return jdbcTemplate.update(sql, desc, taskId);
     }
 
-    public int updateHistoryVariable(String processInstanceId, String variableName, String textValue) {
-        String sql = "UPDATE act_hi_varinst " +
-                "SET TEXT_ = ? " +
-                "WHERE PROC_INST_ID_ = ? " +
-                "AND NAME_ = ?";
+    public int updateHistoryVariable(String processInstanceId, String variableName,
+            String textValue) {
+        String sql = "UPDATE act_hi_varinst " + "SET TEXT_ = ? " + "WHERE PROC_INST_ID_ = ? "
+                + "AND NAME_ = ?";
         return jdbcTemplate.update(sql, textValue, processInstanceId, variableName);
     }
 
@@ -236,16 +226,11 @@ public class CamundaProcessService {
         for (ProcinstVO temp : list) {
             String formKey;
 
-            formKey = formService.getTaskFormKey(
-                    temp.getProcDefId(),
-                    temp.getTaskDefKey());
+            formKey = formService.getTaskFormKey(temp.getProcDefId(), temp.getTaskDefKey());
 
             if (StringUtils.isEmpty(formKey)) {
-                formKey = formService.getStartFormKey(
-                        repositoryService.createProcessDefinitionQuery()
-                                .processDefinitionId(temp.getProcDefId())
-                                .singleResult()
-                                .getId());
+                formKey = formService.getStartFormKey(repositoryService.createProcessDefinitionQuery()
+                        .processDefinitionId(temp.getProcDefId()).singleResult().getId());
             }
 
             temp.setFormKey(formKey);

@@ -117,7 +117,7 @@ public class OaQingjiaServiceImpl implements IOaQingjiaService {
         return bizMapper.deleteOaQingjiaById(id);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int processFormStart(OaQingjia t) {
         String applyUserId = ShiroUtils.getUserId().toString();
@@ -128,8 +128,7 @@ public class OaQingjiaServiceImpl implements IOaQingjiaService {
         Map<String, Object> variables = new HashMap<String, Object>();
 
         String processInstanceName = ShiroUtils.getSysUser().getUserName() + "-" + t.getName() + "-"
-                + DateUtils.dateTime(t.getQuitDate())
-                + "-" + t.getDay();
+                + DateUtils.dateTime(t.getQuitDate()) + "-" + t.getDay();
 
         // start
 
@@ -137,8 +136,8 @@ public class OaQingjiaServiceImpl implements IOaQingjiaService {
         variables.put("users", ""); // 配置下一节点候选用户，模板写了这里不设置变量会报错
         variables.put("groups", ""); // 配置下一阶段候选组
 
-        ProcessInstance processInstance = processService.simpleStart(applyUserId, businessKey, processInstanceName,
-                processDefinitionKey, variables);
+        ProcessInstance processInstance = processService.simpleStart(applyUserId, businessKey,
+                processInstanceName, processDefinitionKey, variables);
 
         // n1
         String processInstanceId = processInstance.getId();
@@ -201,7 +200,7 @@ public class OaQingjiaServiceImpl implements IOaQingjiaService {
         return cnt;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int handle(OaQingjia t) {
         String applyUserId = ShiroUtils.getUserId().toString();
@@ -299,15 +298,13 @@ public class OaQingjiaServiceImpl implements IOaQingjiaService {
         return cnt;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int draft(OaQingjia t) {
-        String processInstanceName = ShiroUtils.getSysUser().getUserName() + "-" +
-                t.getName() + "-"
-                + DateUtils.dateTime(t.getQuitDate())
-                + "-" + t.getDay();
-        processService.updateHistoryVariable(t.getProcInstId(),
-                "processInstanceName", processInstanceName);
+        String processInstanceName = ShiroUtils.getSysUser().getUserName() + "-" + t.getName() + "-"
+                + DateUtils.dateTime(t.getQuitDate()) + "-" + t.getDay();
+        processService.updateHistoryVariable(t.getProcInstId(), "processInstanceName",
+                processInstanceName);
 
         t.setId(t.getProcessId());
         t.setUpdateBy(String.valueOf(ShiroUtils.getUserId()));
@@ -317,12 +314,10 @@ public class OaQingjiaServiceImpl implements IOaQingjiaService {
 
     @Override
     public int processFormEdit(OaQingjia t) {
-        String processInstanceName = ShiroUtils.getSysUser().getUserName() + "-" +
-                t.getName() + "-"
-                + DateUtils.dateTime(t.getQuitDate())
-                + "-" + t.getDay();
-        processService.updateHistoryVariable(t.getProcInstId(),
-                "processInstanceName", processInstanceName);
+        String processInstanceName = ShiroUtils.getSysUser().getUserName() + "-" + t.getName() + "-"
+                + DateUtils.dateTime(t.getQuitDate()) + "-" + t.getDay();
+        processService.updateHistoryVariable(t.getProcInstId(), "processInstanceName",
+                processInstanceName);
 
         t.setId(t.getProcessId());
         t.setUpdateBy(String.valueOf(ShiroUtils.getUserId()));

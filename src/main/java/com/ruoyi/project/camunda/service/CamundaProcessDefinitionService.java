@@ -23,11 +23,9 @@ import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import com.github.pagehelper.Page;
 import com.ruoyi.common.utils.StringUtils;
@@ -40,9 +38,15 @@ import com.ruoyi.project.camunda.mapper.ProcessDefinitionMapper;
 
 import cn.hutool.core.util.StrUtil;
 
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class CamundaProcessDefinitionService {
+
+    /** 流程定义列表无分页时的默认每页条数上限，避免全量加载 */
+    private static final int DEFAULT_PAGE_SIZE_MAX = 500;
+    /** 超级管理员用户 ID（拥有全部流程权限），可按需改为配置项 */
+    private static final long ADMIN_USER_ID = 1L;
+
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
@@ -53,34 +57,39 @@ public class CamundaProcessDefinitionService {
     private FormService formService;
 
     // 不能用原生sql，Description在act_ge_bytearray的二进制文件里，不是表字段，sql获取不到
-    public List<ProcessDefinitionEx> selectProcessDefinitionList(ProcessDefinitionEx processDefinition) {
+    public List<ProcessDefinitionEx> selectProcessDefinitionList(
+            ProcessDefinitionEx processDefinition) {
         PageDomain pageDomain = TableSupport.buildPageRequest();
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
 
-        ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery()
-                .orderByProcessDefinitionId()
-                .desc();
+        ProcessDefinitionQuery processDefinitionQuery = repositoryService
+                .createProcessDefinitionQuery().orderByProcessDefinitionId().desc();
         // 前端传入的查询条件
         if (StringUtils.isNotBlank(processDefinition.getName())) {
-            processDefinitionQuery.processDefinitionNameLike("%" + processDefinition.getName() + "%");
+            processDefinitionQuery
+                    .processDefinitionNameLike("%" + processDefinition.getName() + "%");
         }
         if (StringUtils.isNotBlank(processDefinition.getKey())) {
             processDefinitionQuery.processDefinitionKeyLike("%" + processDefinition.getKey() + "%");
         }
 
-        List<ProcessDefinition> processDefinitionList;
-        if (pageNum != null && pageSize != null) {
-            // camunda的pageNum和pagehelper的差1
-            processDefinitionList = processDefinitionQuery.listPage((pageNum - 1) * pageSize, pageSize);
-        } else {
-            processDefinitionList = processDefinitionQuery.list();
+        int pn = (pageNum != null && pageNum > 0) ? pageNum : 1;
+        int ps = (pageSize != null && pageSize > 0) ? pageSize : 10;
+        if (pageNum == null || pageSize == null) {
+            ps = Math.min(ps, DEFAULT_PAGE_SIZE_MAX);
         }
+        // camunda 的 pageNum 和 pagehelper 的差 1
+        List<ProcessDefinition> processDefinitionList = processDefinitionQuery.listPage((pn - 1) * ps, ps);
 
         Page<ProcessDefinitionEx> list = new Page<>();
         list.setTotal(processDefinitionQuery.count());
-        list.setPageNum(pageNum);
-        list.setPageSize(pageSize);
+        list.setPageNum(pn);
+        list.setPageSize(ps);
+
+        // 批量查询 deployment，避免 N+1
+        Map<String, Deployment> deploymentMap = repositoryService.createDeploymentQuery().list()
+                .stream().collect(Collectors.toMap(Deployment::getId, d -> d));
 
         for (ProcessDefinition definition : processDefinitionList) {
             ProcessDefinitionEntity entityImpl = (ProcessDefinitionEntity) definition;
@@ -92,10 +101,10 @@ public class CamundaProcessDefinitionService {
             entity.setVersion(definition.getVersion());
             entity.setDescription(definition.getDescription());
             entity.setDeploymentId(definition.getDeploymentId());
-            Deployment deployment = repositoryService.createDeploymentQuery()
-                    .deploymentId(definition.getDeploymentId())
-                    .singleResult();
-            entity.setDeploymentTime(deployment.getDeploymentTime());
+            Deployment deployment = deploymentMap.get(definition.getDeploymentId());
+            if (deployment != null) {
+                entity.setDeploymentTime(deployment.getDeploymentTime());
+            }
             entity.setDiagramResourceName(definition.getDiagramResourceName());
             entity.setResourceName(definition.getResourceName());
             entity.setSuspendState(String.valueOf(entityImpl.getSuspensionState()));
@@ -104,7 +113,8 @@ public class CamundaProcessDefinitionService {
         return list;
     }
 
-    public List<ProcessDefinitionEx> selectProcessDefinitionNewestVersionList(ProcessDefinitionEx processDefinition) {
+    public List<ProcessDefinitionEx> selectProcessDefinitionNewestVersionList(
+            ProcessDefinitionEx processDefinition) {
         PageDomain pageDomain = TableSupport.buildPageRequest();
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
@@ -112,19 +122,13 @@ public class CamundaProcessDefinitionService {
         Long userId = ShiroUtils.getUserId();
 
         ProcessDefinitionQuery processDefinitionQuery;
-        if (userId == 1L) {
-            processDefinitionQuery = repositoryService
-                    .createProcessDefinitionQuery()
-                    .latestVersion()
-                    .active();
+        if (ADMIN_USER_ID == userId) {
+            processDefinitionQuery = repositoryService.createProcessDefinitionQuery().latestVersion().active();
         } else {
             String[] userHasRoles = processDefinitionMapper.selectProcdefKeysByUserId(userId);
 
-            processDefinitionQuery = repositoryService
-                    .createProcessDefinitionQuery()
-                    .processDefinitionKeysIn(userHasRoles)
-                    .latestVersion()
-                    .active();
+            processDefinitionQuery = repositoryService.createProcessDefinitionQuery()
+                    .processDefinitionKeysIn(userHasRoles).latestVersion().active();
         }
 
         // 前端传入的查询条件
@@ -132,14 +136,19 @@ public class CamundaProcessDefinitionService {
         if (StrUtil.isNotBlank(nameLike)) {
             processDefinitionQuery.processDefinitionNameLike("%" + nameLike + "%");
         }
+        int pn = (pageNum != null && pageNum > 0) ? pageNum : 1;
+        int ps = (pageSize != null && pageSize > 0) ? pageSize : 10;
         List<ProcessDefinition> processDefinitions = processDefinitionQuery
-                .orderByProcessDefinitionName().asc()
-                .listPage((pageNum - 1) * pageSize, pageSize);
+                .orderByProcessDefinitionName().asc().listPage((pn - 1) * ps, ps);
 
         Page<ProcessDefinitionEx> list = new Page<>();
         list.setTotal(processDefinitionQuery.count());
-        list.setPageNum(pageNum);
-        list.setPageSize(pageSize);
+        list.setPageNum(pn);
+        list.setPageSize(ps);
+
+        // 批量查询 deployment，避免 N+1
+        Map<String, Deployment> deploymentMap = repositoryService.createDeploymentQuery().list()
+                .stream().collect(Collectors.toMap(Deployment::getId, d -> d));
 
         for (ProcessDefinition definition : processDefinitions) {
             ProcessDefinitionEntity entityImpl = (ProcessDefinitionEntity) definition;
@@ -151,21 +160,15 @@ public class CamundaProcessDefinitionService {
             entity.setVersion(definition.getVersion());
             entity.setDescription(definition.getDescription());
             entity.setDeploymentId(definition.getDeploymentId());
-            Deployment deployment = repositoryService.createDeploymentQuery()
-                    .deploymentId(definition.getDeploymentId())
-                    .singleResult();
-            entity.setDeploymentTime(deployment.getDeploymentTime());
+            Deployment deployment = deploymentMap.get(definition.getDeploymentId());
+            if (deployment != null) {
+                entity.setDeploymentTime(deployment.getDeploymentTime());
+            }
             entity.setDiagramResourceName(definition.getDiagramResourceName());
             entity.setResourceName(definition.getResourceName());
             entity.setSuspendState(String.valueOf(entityImpl.getSuspensionState()));
-
-            // 选中某个最新版本的流程点击发起跳转到对应的业务表单
-            String startFormKey = formService.getStartFormKey(
-                    repositoryService.createProcessDefinitionQuery()
-                            .processDefinitionId(definition.getId())
-                            .singleResult()
-                            .getId());
-            entity.setStartFormKey(startFormKey);
+            // 直接使用 definition.getId()，避免额外查询
+            entity.setStartFormKey(formService.getStartFormKey(definition.getId()));
 
             list.add(entity);
         }
@@ -176,15 +179,11 @@ public class CamundaProcessDefinitionService {
         if (StringUtils.isNotBlank(filePath)) {
             if (filePath.endsWith(".zip")) {
                 ZipInputStream inputStream = new ZipInputStream(new FileInputStream(filePath));
-                repositoryService.createDeployment()
-                        .name(FilenameUtils.getName(filePath))
-                        .addZipInputStream(inputStream)
-                        .deploy();
+                repositoryService.createDeployment().name(FilenameUtils.getName(filePath))
+                        .addZipInputStream(inputStream).deploy();
             } else if (filePath.endsWith(".bpmn")) {
-                repositoryService.createDeployment()
-                        .name(FilenameUtils.getName(filePath))
-                        .addInputStream(filePath, new FileInputStream(filePath))
-                        .deploy();
+                repositoryService.createDeployment().name(FilenameUtils.getName(filePath))
+                        .addInputStream(filePath, new FileInputStream(filePath)).deploy();
             }
         }
     }
@@ -193,13 +192,12 @@ public class CamundaProcessDefinitionService {
         String[] deploymentIdsArr = Convert.toStrArray(deploymentIds);
         int counter = 0;
         for (String deploymentId : deploymentIdsArr) {
-            List<ProcessInstance> instanceList = runtimeService.createProcessInstanceQuery()
-                    .deploymentId(deploymentId)
-                    .list();
-            if (!CollectionUtils.isEmpty(instanceList)) {
+            long runningCount = runtimeService.createProcessInstanceQuery().deploymentId(deploymentId).count();
+            if (runningCount > 0) {
                 throw new Exception("删除失败，存在运行中的流程实例");
             }
-            repositoryService.deleteDeployment(deploymentId, true); // true 表示级联删除引用，比如 act_ru_execution 数据
+            repositoryService.deleteDeployment(deploymentId, true); // true 表示级联删除引用，比如
+                                                                    // act_ru_execution 数据
             counter++;
         }
         return counter;
@@ -217,10 +215,10 @@ public class CamundaProcessDefinitionService {
         return processDefinitionMapper.selectProcdefKey(roleId);
     }
 
-    public void readResource(String processDefinitionId, String resourceName, HttpServletResponse response) {
+    public void readResource(String processDefinitionId, String resourceName,
+            HttpServletResponse response) {
         ProcessDefinition pd = repositoryService.createProcessDefinitionQuery()
-                .processDefinitionId(processDefinitionId)
-                .singleResult();
+                .processDefinitionId(processDefinitionId).singleResult();
 
         InputStream resourceAsStream = repositoryService.getResourceAsStream(pd.getDeploymentId(), resourceName);
 
@@ -236,8 +234,7 @@ public class CamundaProcessDefinitionService {
     }
 
     public Map<String, String> getXml(String processDefinitionId) {
-        try (InputStream in = repositoryService
-                .getProcessModel(processDefinitionId);
+        try (InputStream in = repositoryService.getProcessModel(processDefinitionId);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
 
             String xml = reader.lines().collect(Collectors.joining("\n"));

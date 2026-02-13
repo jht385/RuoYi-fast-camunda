@@ -40,7 +40,8 @@ public class OaQingjiaController extends BaseController {
     private IdGeneratorSnowflake idGeneratorSnowflake;
 
     @GetMapping("/processForm")
-    public String processForm(ModelMap mmap, String processId, String taskId, String node, String action) {
+    public String processForm(ModelMap mmap, String processId, String taskId, String node,
+            String action) {
         if (StringUtils.isEmpty(action)) {
             mmap.put("processId", String.valueOf(idGeneratorSnowflake.nextId()));
             mmap.put("action", "new");
