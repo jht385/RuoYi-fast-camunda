@@ -11,3 +11,23 @@
 3.  增加简单文件上传模块，带通用界面。比较low，要用对象储存的自己改吧
 5.  引入camunda工作流，有个请假流程的例子。
 6.  增加角色和能够发起的工作流的关系
+
+## 演示图
+
+<table>
+    <tr>
+        <td><img src="https://github.com/user-attachments/assets/455fdf09-8efc-4801-884c-81fe63e2ecaf"/></td>
+        <td><img src="https://github.com/user-attachments/assets/211f2037-759e-4af1-936a-6b14041f3eff"/></td>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/user-attachments/assets/55252505-afdb-4370-8fdc-667e9b933577"/></td>
+        <td><img src="https://github.com/user-attachments/assets/a2aa3ae7-63e3-45bf-8812-3e46f857ee43"/></td>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/user-attachments/assets/a6afb379-a699-44a2-8076-eac09c7131be"/></td>
+        <td><img src="https://github.com/user-attachments/assets/b5bd69ce-9c66-46e5-b2bc-59031dcbab9b"/></td>
+    </tr>
+	  <tr>
+        <td><img src="https://github.com/user-attachments/assets/1e860a02-fddb-4f00-9a50-d469689e7362"/></td>
+    </tr>
+</table>
