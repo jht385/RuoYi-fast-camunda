@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.utils.StringUtils;
@@ -123,6 +124,19 @@ public class DeptController extends BaseController
             return AjaxResult.error("该部门包含未停用的子部门！");
         }
         return toAjax(deptService.updateDept(dept));
+    }
+
+    /**
+     * 保存部门排序
+     */
+    @Log(title = "保存部门排序", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("system:dept:edit")
+    @PostMapping("/updateSort")
+    @ResponseBody
+    public AjaxResult updateSort(@RequestParam String[] deptIds, @RequestParam String[] orderNums)
+    {
+        deptService.updateDeptSort(deptIds, orderNums);
+        return success();
     }
 
     /**

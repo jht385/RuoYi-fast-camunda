@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.ruoyi</groupId>
     <artifactId>RuoYi-fast-camunda</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
     <packaging>jar</packaging>
 
     <name>ruoyi</name>
@@ -42,7 +42,6 @@
         <spring-framework.version>5.3.39</spring-framework.version>
         <hutool.version>5.8.24</hutool.version>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <!-- 7.16 对应 sb 2.15.x，因为若依fast是2.5.x，对应 camunda7.16.0 -->
@@ -229,7 +228,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        
         <!-- 防止进入swagger页面报类型转换错误，排除3.0.0中的引用，手动增加1.6.2版本 -->
         <dependency>
             <groupId>io.swagger</groupId>
@@ -283,7 +282,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <fork>true</fork>                    <!-- 如果没有该配置，devtools不会生效 -->
+                    <fork>true</fork>
                 </configuration>
             </plugin>
             <!-- YUI Compressor (CSS/JS压缩) 
