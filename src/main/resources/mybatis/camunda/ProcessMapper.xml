@@ -39,26 +39,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="todoList" parameterType="TaskVO" resultMap="TaskResult">
         <include refid="todoListVo"/>
         FROM act_ru_task t1
-        <choose>
-            <when test="isAdmin == true">
-            </when>
-            <otherwise>
-                INNER JOIN act_ru_identitylink ari ON t1.ID_ = ari.TASK_ID_
-                AND (
-                    EXISTS (
-                        SELECT 1 FROM sys_user_role sur 
-                        WHERE sur.user_id = #{userId} 
-                        AND sur.role_id = ari.GROUP_ID_
-                    )
-                    OR ari.USER_ID_ = #{userId}
-                )
-            </otherwise>
-        </choose>
         LEFT JOIN act_hi_varinst t2 ON t2.NAME_ = 'processInstanceName' AND t2.EXECUTION_ID_ = t1.EXECUTION_ID_
         LEFT JOIN act_re_procdef t3 ON t1.PROC_DEF_ID_ = t3.ID_
-        left join act_hi_procinst t4 on t1.PROC_INST_ID_ = t4.PROC_INST_ID_
+        LEFT JOIN act_hi_procinst t4 ON t1.PROC_INST_ID_ = t4.PROC_INST_ID_
         <where>
             t1.SUSPENSION_STATE_ = 1
+            <if test="isAdmin != true">
+                AND EXISTS (
+                    SELECT 1 FROM act_ru_identitylink ari 
+                    WHERE ari.TASK_ID_ = t1.ID_
+                    AND (
+                        ari.USER_ID_ = #{userId}
+                        OR (
+                            ari.GROUP_ID_ IS NOT NULL 
+                            AND EXISTS (
+                                SELECT 1 FROM sys_user_role sur 
+                                WHERE sur.user_id = #{userId} 
+                                AND sur.role_id = ari.GROUP_ID_
+                            )
+                        )
+                    )
+                )
+            </if>
             <if test="processInstanceName != null and processInstanceName != ''"> AND t2.TEXT_ LIKE CONCAT('%', #{processInstanceName}, '%') </if>
             <if test="procDefKey != null and procDefKey != ''"> AND t3.KEY_ = #{procDefKey} </if>
         </where>
