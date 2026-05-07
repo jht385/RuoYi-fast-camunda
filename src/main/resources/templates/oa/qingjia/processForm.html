@@ -221,11 +221,15 @@
             formatter: function (value, row, index) {
               // 图片预览（注意：如存储在本地直接获取数据库路径，如有配置context-path需要使用ctx+路径）
               // 如：/profile/upload/2019/08/08/3b7a839aced67397bac694d77611ce72.png
-              if (!row.type || row.type.indexOf('image') == -1) {
-                return "<a target='_blank' href='/common/download/resource?resource=" + row.url + "'>查看</a>";
-              } else {
-                return $.table.imageView("/common/download/resource?resource=" + row.url, '', '', 'blank');
+              var isImage = row.fileType && row.fileType.indexOf('image') !== -1;
+              var canPreview = isImage || /^(application\/pdf|video\/|audio\/|text\/)/.test(row.fileType);
+
+              if (isImage) {
+                  return $.table.imageView("/common/download/resource?resource=" + row.url + "&preview=1", '', '', 'blank');
               }
+
+              var linkText = canPreview ? '查看' : '下载';
+              return "<a target='_blank' href='/common/download/resource?resource=" + row.url + (canPreview ? '&preview=1' : '') + "'>" + linkText + "</a>";
             }
           },
           { field: 'createTime', title: '创建时间' },

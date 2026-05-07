@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.utils.StringUtils;
@@ -138,7 +139,8 @@ public class CommonController
      * 本地资源通用下载
      */
     @GetMapping("/download/resource")
-    public void resourceDownload(String resource, HttpServletRequest request, HttpServletResponse response) throws Exception
+    public void resourceDownload(String resource, @RequestParam(defaultValue = "false") boolean preview,
+	    HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         try
         {
@@ -152,8 +154,22 @@ public class CommonController
             String downloadPath = localPath + FileUtils.stripPrefix(resource);
             // 下载名称
             String downloadName = StringUtils.substringAfterLast(downloadPath, "/");
-            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-            FileUtils.setAttachmentResponseHeader(response, downloadName);
+			
+			if (preview) {
+                // 预览模式：让浏览器自己决定怎么处理
+                String mimeType = request.getServletContext().getMimeType(downloadName);
+                if (StringUtils.isNotEmpty(mimeType)) {
+                    response.setContentType(mimeType);
+                }
+                // 不设置 Content-Disposition，浏览器会根据 MIME 类型自动处理：
+                // - 图片/PDF/视频：直接显示
+                // - Word/Excel 等不支持的：提示下载或另存为
+            } else {
+                // 原有下载逻辑不变
+                response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+                FileUtils.setAttachmentResponseHeader(response, downloadName);
+            }
+
             FileUtils.writeBytes(downloadPath, response.getOutputStream());
         }
         catch (Exception e)
