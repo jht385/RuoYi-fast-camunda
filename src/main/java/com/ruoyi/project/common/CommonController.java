@@ -1,5 +1,6 @@
 package com.ruoyi.project.common;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -164,6 +165,16 @@ public class CommonController
                 // 不设置 Content-Disposition，浏览器会根据 MIME 类型自动处理：
                 // - 图片/PDF/视频：直接显示
                 // - Word/Excel 等不支持的：提示下载或另存为
+                // 预览模式也带文件名，但用 inline 让浏览器直接显示
+                // response.setHeader("Content-Disposition", "inline; filename=" + downloadName);
+
+                // 简单处理：URL 编码
+                String encodedName = URLEncoder.encode(downloadName, "UTF-8").replace("+", "%20");
+                response.setHeader("Content-Disposition", "inline; filename=" + encodedName);
+
+                // 或者更兼容的方案（RFC 5987）
+                response.setHeader("Content-Disposition", "inline; filename=\"" + encodedName
+                        + "\"; filename*=UTF-8''" + encodedName);
             } else {
                 // 原有下载逻辑不变
                 response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
