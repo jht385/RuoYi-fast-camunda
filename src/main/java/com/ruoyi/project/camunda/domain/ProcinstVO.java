@@ -1,7 +1,6 @@
 package com.ruoyi.project.camunda.domain;
 
 import java.util.Map;
-
 import lombok.Data;
 
 @Data
@@ -25,4 +24,5 @@ public class ProcinstVO {
 	private String pass;
 	private Long userId;
 	private Map<String, Object> params;
+	private Boolean isFinish;
 }

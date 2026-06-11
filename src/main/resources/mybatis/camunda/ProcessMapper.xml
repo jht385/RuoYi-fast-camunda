@@ -125,6 +125,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="procInstId != null and procInstId != ''"> and t1.PROC_INST_ID_ = #{procInstId} </if>
             <if test="processInstanceName != null and processInstanceName != ''"> and t2.TEXT_ like concat('%', #{processInstanceName}, '%') </if>
             <if test="procDefKey != null and procDefKey != ''"> and t1.PROC_DEF_KEY_ = #{procDefKey} </if>
+            <if test="isFinish != null">
+                <choose>
+                    <when test="isFinish == true">
+                        and t1.END_TIME_ is not null
+                    </when>
+                    <otherwise>
+                        and t1.END_TIME_ is null
+                    </otherwise>
+                </choose>
+            </if>
             <if test="params.beginTime != null and params.beginTime != ''">
                 AND date_format(t1.START_TIME_,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>

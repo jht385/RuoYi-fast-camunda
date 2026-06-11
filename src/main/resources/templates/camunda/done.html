@@ -28,6 +28,13 @@
 									<option th:each="pt : ${ptl}" th:text="${pt.NAME_}" th:value="${pt.KEY_}"></option>
 								</select>
 							</li>
+							<li>
+								<label>是否完成：</label>
+								<select id="isFinish" name="isFinish" th:with="dicts=${@dict.getType('sys_yes_no_01')}" class="form-control">
+									<option value="">所有</option>
+									<option th:each="dict : ${dicts}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
 							<li class="select-time">
 								<label>发起时间： </label>
 								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"
