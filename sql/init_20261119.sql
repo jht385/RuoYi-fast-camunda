@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 25/03/2026 12:29:54
+ Date: 19/11/2026 09:19:08
 */
 
 SET NAMES utf8mb4;
@@ -1555,6 +1555,54 @@ INSERT INTO `act_ru_meter_log` VALUES ('4d319596-0727-11f1-b7f4-0a0027000004', '
 INSERT INTO `act_ru_meter_log` VALUES ('4d319597-0727-11f1-b7f4-0a0027000004', 'job-acquisition-attempt', '192.168.56.1$default', 1, '2026-02-11 16:54:41', 1770800080540);
 INSERT INTO `act_ru_meter_log` VALUES ('4d319598-0727-11f1-b7f4-0a0027000004', 'executed-decision-instances', '192.168.56.1$default', 0, '2026-02-11 16:54:41', 1770800080540);
 INSERT INTO `act_ru_meter_log` VALUES ('4d319599-0727-11f1-b7f4-0a0027000004', 'job-failed', '192.168.56.1$default', 0, '2026-02-11 16:54:41', 1770800080540);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4da2-280f-11f1-986b-0a0027000003', 'root-process-instance-start', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4da3-280f-11f1-986b-0a0027000003', 'activity-instance-start', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4da4-280f-11f1-986b-0a0027000003', 'job-acquired-failure', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4da5-280f-11f1-986b-0a0027000003', 'job-locked-exclusive', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4da6-280f-11f1-986b-0a0027000003', 'job-execution-rejected', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4da7-280f-11f1-986b-0a0027000003', 'executed-decision-elements', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4da8-280f-11f1-986b-0a0027000003', 'activity-instance-end', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4da9-280f-11f1-986b-0a0027000003', 'job-successful', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4daa-280f-11f1-986b-0a0027000003', 'job-acquired-success', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4dab-280f-11f1-986b-0a0027000003', 'job-acquisition-attempt', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4dac-280f-11f1-986b-0a0027000003', 'executed-decision-instances', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('4e0b4dad-280f-11f1-986b-0a0027000003', 'job-failed', '192.168.56.1$default', 0, '2026-03-25 13:56:02', 1774418162415);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd8a-280e-11f1-8495-0a0027000003', 'root-process-instance-start', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd8b-280e-11f1-8495-0a0027000003', 'activity-instance-start', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd8c-280e-11f1-8495-0a0027000003', 'job-acquired-failure', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd8d-280e-11f1-8495-0a0027000003', 'job-locked-exclusive', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd8e-280e-11f1-8495-0a0027000003', 'job-execution-rejected', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd8f-280e-11f1-8495-0a0027000003', 'executed-decision-elements', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd90-280e-11f1-8495-0a0027000003', 'activity-instance-end', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd91-280e-11f1-8495-0a0027000003', 'job-successful', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd92-280e-11f1-8495-0a0027000003', 'job-acquired-success', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd93-280e-11f1-8495-0a0027000003', 'job-acquisition-attempt', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd94-280e-11f1-8495-0a0027000003', 'executed-decision-instances', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('7209bd95-280e-11f1-8495-0a0027000003', 'job-failed', '192.168.56.1$default', 0, '2026-03-25 13:49:53', 1774417793306);
+INSERT INTO `act_ru_meter_log` VALUES ('bf14f2e3-2803-11f1-ba7d-0a0027000003', 'root-process-instance-start', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('bf1519f4-2803-11f1-ba7d-0a0027000003', 'activity-instance-start', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('bf1519f5-2803-11f1-ba7d-0a0027000003', 'job-acquired-failure', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('bf1519f6-2803-11f1-ba7d-0a0027000003', 'job-locked-exclusive', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('bf1519f7-2803-11f1-ba7d-0a0027000003', 'job-execution-rejected', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('bf1519f8-2803-11f1-ba7d-0a0027000003', 'executed-decision-elements', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('bf1519f9-2803-11f1-ba7d-0a0027000003', 'activity-instance-end', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('bf1519fa-2803-11f1-ba7d-0a0027000003', 'job-successful', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('bf1519fb-2803-11f1-ba7d-0a0027000003', 'job-acquired-success', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('bf1519fc-2803-11f1-ba7d-0a0027000003', 'job-acquisition-attempt', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('bf1519fd-2803-11f1-ba7d-0a0027000003', 'executed-decision-instances', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('bf1519fe-2803-11f1-ba7d-0a0027000003', 'job-failed', '192.168.56.1$default', 0, '2026-03-25 12:33:18', 1774413198100);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b52-280f-11f1-adfa-0a0027000003', 'root-process-instance-start', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b53-280f-11f1-adfa-0a0027000003', 'activity-instance-start', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b54-280f-11f1-adfa-0a0027000003', 'job-acquired-failure', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b55-280f-11f1-adfa-0a0027000003', 'job-locked-exclusive', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b56-280f-11f1-adfa-0a0027000003', 'job-execution-rejected', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b57-280f-11f1-adfa-0a0027000003', 'executed-decision-elements', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b58-280f-11f1-adfa-0a0027000003', 'activity-instance-end', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b59-280f-11f1-adfa-0a0027000003', 'job-successful', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b5a-280f-11f1-adfa-0a0027000003', 'job-acquired-success', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b5b-280f-11f1-adfa-0a0027000003', 'job-acquisition-attempt', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b5c-280f-11f1-adfa-0a0027000003', 'executed-decision-instances', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
+INSERT INTO `act_ru_meter_log` VALUES ('c5914b5d-280f-11f1-adfa-0a0027000003', 'job-failed', '192.168.56.1$default', 0, '2026-03-25 13:59:23', 1774418362935);
 INSERT INTO `act_ru_meter_log` VALUES ('d9e0dd40-2334-11f1-b2f5-0a0027000003', 'root-process-instance-start', '192.168.56.1$default', 0, '2026-03-19 09:42:13', 1773884532584);
 INSERT INTO `act_ru_meter_log` VALUES ('d9e0dd41-2334-11f1-b2f5-0a0027000003', 'activity-instance-start', '192.168.56.1$default', 0, '2026-03-19 09:42:13', 1773884532584);
 INSERT INTO `act_ru_meter_log` VALUES ('d9e0dd42-2334-11f1-b2f5-0a0027000003', 'job-acquired-failure', '192.168.56.1$default', 0, '2026-03-19 09:42:13', 1773884532584);
@@ -1567,6 +1615,18 @@ INSERT INTO `act_ru_meter_log` VALUES ('d9e0dd48-2334-11f1-b2f5-0a0027000003', '
 INSERT INTO `act_ru_meter_log` VALUES ('d9e0dd49-2334-11f1-b2f5-0a0027000003', 'job-acquisition-attempt', '192.168.56.1$default', 18, '2026-03-19 09:42:13', 1773884532584);
 INSERT INTO `act_ru_meter_log` VALUES ('d9e0dd4a-2334-11f1-b2f5-0a0027000003', 'executed-decision-instances', '192.168.56.1$default', 0, '2026-03-19 09:42:13', 1773884532584);
 INSERT INTO `act_ru_meter_log` VALUES ('d9e0dd4b-2334-11f1-b2f5-0a0027000003', 'job-failed', '192.168.56.1$default', 0, '2026-03-19 09:42:13', 1773884532584);
+INSERT INTO `act_ru_meter_log` VALUES ('df760ada-28db-11f1-99c1-0a0027000003', 'root-process-instance-start', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
+INSERT INTO `act_ru_meter_log` VALUES ('df760adb-28db-11f1-99c1-0a0027000003', 'activity-instance-start', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
+INSERT INTO `act_ru_meter_log` VALUES ('df760adc-28db-11f1-99c1-0a0027000003', 'job-acquired-failure', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
+INSERT INTO `act_ru_meter_log` VALUES ('df760add-28db-11f1-99c1-0a0027000003', 'job-locked-exclusive', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
+INSERT INTO `act_ru_meter_log` VALUES ('df760ade-28db-11f1-99c1-0a0027000003', 'job-execution-rejected', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
+INSERT INTO `act_ru_meter_log` VALUES ('df760adf-28db-11f1-99c1-0a0027000003', 'executed-decision-elements', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
+INSERT INTO `act_ru_meter_log` VALUES ('df760ae0-28db-11f1-99c1-0a0027000003', 'activity-instance-end', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
+INSERT INTO `act_ru_meter_log` VALUES ('df760ae1-28db-11f1-99c1-0a0027000003', 'job-successful', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
+INSERT INTO `act_ru_meter_log` VALUES ('df760ae2-28db-11f1-99c1-0a0027000003', 'job-acquired-success', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
+INSERT INTO `act_ru_meter_log` VALUES ('df760ae3-28db-11f1-99c1-0a0027000003', 'job-acquisition-attempt', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
+INSERT INTO `act_ru_meter_log` VALUES ('df760ae4-28db-11f1-99c1-0a0027000003', 'executed-decision-instances', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
+INSERT INTO `act_ru_meter_log` VALUES ('df760ae5-28db-11f1-99c1-0a0027000003', 'job-failed', '169.254.185.86$default', 0, '2026-03-26 14:20:24', 1774506023718);
 INSERT INTO `act_ru_meter_log` VALUES ('e450ad1a-0726-11f1-b7f4-0a0027000004', 'root-process-instance-start', '192.168.56.1$default', 0, '2026-02-11 16:51:45', 1770799904582);
 INSERT INTO `act_ru_meter_log` VALUES ('e450ad1b-0726-11f1-b7f4-0a0027000004', 'activity-instance-start', '192.168.56.1$default', 0, '2026-02-11 16:51:45', 1770799904582);
 INSERT INTO `act_ru_meter_log` VALUES ('e450ad1c-0726-11f1-b7f4-0a0027000004', 'job-acquired-failure', '192.168.56.1$default', 0, '2026-02-11 16:51:45', 1770799904582);
@@ -1809,7 +1869,7 @@ CREATE TABLE `oa_qingjia`  (
 -- ----------------------------
 -- Records of oa_qingjia
 -- ----------------------------
-INSERT INTO `oa_qingjia` VALUES (2022190280303837184, '0d13517a-08a2-11f1-8c07-0a0027000003', '1', '请假11', 3, '2026-01-25 00:00:00', 'qweqwe12', '1', '2026-02-13 14:05:53', '1', '2026-02-13 14:07:22');
+INSERT INTO `oa_qingjia` VALUES (2022190280303837184, '0d13517a-08a2-11f1-8c07-0a0027000003', '1', '请假11', 3, '2026-01-25 00:00:00', 'qweqwe12', '1', '2026-02-13 14:05:53', '1', '2026-05-07 15:50:53');
 
 -- ----------------------------
 -- Table structure for qrtz_blob_triggers
@@ -2117,7 +2177,8 @@ CREATE TABLE `sys_dict_data`  (
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`dict_code`) USING BTREE
+  PRIMARY KEY (`dict_code`) USING BTREE,
+  UNIQUE INDEX `uk_dict_type_value`(`dict_type`, `dict_value`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -2212,7 +2273,13 @@ CREATE TABLE `sys_file`  (
 -- ----------------------------
 -- Records of sys_file
 -- ----------------------------
-INSERT INTO `sys_file` VALUES ('2022190458641448960', '1.txt', 'text/plain', '/profile/upload/2026/02/13/1_20260213140550A004.txt', '0', 'qingjia_process', '2022190280303837184', 'admin', '2026-02-13 14:05:50');
+INSERT INTO `sys_file` VALUES ('2052295039643680768', '1.html', 'text/html', '/profile/upload/2026/05/07/1_20260507155041A011.html', '0', 'qingjia_process', '2022190280303837184', 'admin', '2026-05-07 15:50:42');
+INSERT INTO `sys_file` VALUES ('2052295039643680769', '1.txt', 'text/plain', '/profile/upload/2026/05/07/1_20260507155041A012.txt', '0', 'qingjia_process', '2022190280303837184', 'admin', '2026-05-07 15:50:42');
+INSERT INTO `sys_file` VALUES ('2052295039643680770', '1.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '/profile/upload/2026/05/07/1_20260507155041A013.xlsx', '0', 'qingjia_process', '2022190280303837184', 'admin', '2026-05-07 15:50:42');
+INSERT INTO `sys_file` VALUES ('2052295039643680771', '11.png', 'image/png', '/profile/upload/2026/05/07/11_20260507155041A014.png', '0', 'qingjia_process', '2022190280303837184', 'admin', '2026-05-07 15:50:42');
+INSERT INTO `sys_file` VALUES ('2052295039643680772', 'awb1481726256.pdf', 'application/pdf', '/profile/upload/2026/05/07/awb1481726256_20260507155041A015.pdf', '0', 'qingjia_process', '2022190280303837184', 'admin', '2026-05-07 15:50:42');
+INSERT INTO `sys_file` VALUES ('2052295039643680773', 'd3.png', 'image/png', '/profile/upload/2026/05/07/d3_20260507155041A016.png', '0', 'qingjia_process', '2022190280303837184', 'admin', '2026-05-07 15:50:42');
+INSERT INTO `sys_file` VALUES ('2052295039643680774', 'fff.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '/profile/upload/2026/05/07/fff_20260507155041A017.docx', '0', 'qingjia_process', '2022190280303837184', 'admin', '2026-05-07 15:50:42');
 
 -- ----------------------------
 -- Table structure for sys_job
@@ -2281,7 +2348,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status`) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -2292,6 +2359,22 @@ INSERT INTO `sys_logininfor` VALUES (3, 'admin', '127.0.0.1', '内网IP', 'Edge 
 INSERT INTO `sys_logininfor` VALUES (4, 'admin', '127.0.0.1', '内网IP', 'Edge 145', 'Windows >=10', '0', '登录成功', '2026-02-27 08:52:32');
 INSERT INTO `sys_logininfor` VALUES (5, 'admin', '127.0.0.1', '内网IP', 'Edge 145', 'Windows >=10', '0', '退出成功', '2026-02-27 08:53:10');
 INSERT INTO `sys_logininfor` VALUES (6, 'admin', '127.0.0.1', '内网IP', 'Edge 146', 'Windows >=10', '0', '登录成功', '2026-03-19 09:28:09');
+INSERT INTO `sys_logininfor` VALUES (7, 'admin', '127.0.0.1', '内网IP', 'Edge 146', 'Windows >=10', '0', '登录成功', '2026-03-25 14:02:12');
+INSERT INTO `sys_logininfor` VALUES (8, 'admin', '127.0.0.1', '内网IP', 'Edge 146', 'Windows >=10', '0', '登录成功', '2026-03-25 14:12:23');
+INSERT INTO `sys_logininfor` VALUES (9, 'admin', '127.0.0.1', '内网IP', 'Edge 146', 'Windows >=10', '0', '登录成功', '2026-03-25 14:12:33');
+INSERT INTO `sys_logininfor` VALUES (10, 'admin', '127.0.0.1', '内网IP', 'Edge 146', 'Windows >=10', '0', '退出成功', '2026-03-25 14:12:45');
+INSERT INTO `sys_logininfor` VALUES (11, 'admin', '127.0.0.1', '内网IP', 'Edge 146', 'Windows >=10', '0', '登录成功', '2026-03-26 14:25:40');
+INSERT INTO `sys_logininfor` VALUES (12, 'admin', '127.0.0.1', '内网IP', 'Edge 146', 'Windows >=10', '0', '登录成功', '2026-04-14 10:19:19');
+INSERT INTO `sys_logininfor` VALUES (13, 'admin', '127.0.0.1', '内网IP', 'Edge 146', 'Windows >=10', '0', '登录成功', '2026-04-14 10:28:38');
+INSERT INTO `sys_logininfor` VALUES (14, 'admin', '127.0.0.1', '内网IP', 'Edge 146', 'Windows >=10', '0', '退出成功', '2026-04-14 10:29:12');
+INSERT INTO `sys_logininfor` VALUES (15, 'admin', '127.0.0.1', '内网IP', 'Edge 147', 'Windows >=10', '0', '登录成功', '2026-05-07 15:49:00');
+INSERT INTO `sys_logininfor` VALUES (16, 'admin', '127.0.0.1', '内网IP', 'Edge 149', 'Windows >=10', '1', '密码输入错误1次', '2026-06-11 12:40:40');
+INSERT INTO `sys_logininfor` VALUES (17, 'admin', '127.0.0.1', '内网IP', 'Edge 149', 'Windows >=10', '0', '登录成功', '2026-06-11 12:40:43');
+INSERT INTO `sys_logininfor` VALUES (18, 'admin', '127.0.0.1', '内网IP', 'Edge 149', 'Windows >=10', '0', '退出成功', '2026-06-11 12:41:03');
+INSERT INTO `sys_logininfor` VALUES (19, 'admin', '127.0.0.1', '内网IP', 'Edge 152', 'Windows >=10', '0', '登录成功', '2026-09-08 17:11:56');
+INSERT INTO `sys_logininfor` VALUES (20, 'admin', '127.0.0.1', '内网IP', 'Edge 152', 'Windows >=10', '0', '退出成功', '2026-09-08 17:12:34');
+INSERT INTO `sys_logininfor` VALUES (21, 'admin', '127.0.0.1', '内网IP', 'Edge 153', 'Windows >=10', '0', '登录成功', '2026-09-22 14:22:16');
+INSERT INTO `sys_logininfor` VALUES (22, 'admin', '127.0.0.1', '内网IP', 'Edge 153', 'Windows >=10', '0', '退出成功', '2026-09-22 14:22:27');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -2460,11 +2543,12 @@ CREATE TABLE `sys_notice_read`  (
   `read_time` datetime NOT NULL COMMENT '阅读时间',
   PRIMARY KEY (`read_id`) USING BTREE,
   UNIQUE INDEX `uk_user_notice`(`user_id`, `notice_id`) USING BTREE COMMENT '同一用户同一公告只记录一次'
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '公告已读记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '公告已读记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_notice_read
 -- ----------------------------
+INSERT INTO `sys_notice_read` VALUES (7, 3, 1, '2026-04-14 10:28:58');
 
 -- ----------------------------
 -- Table structure for sys_oper_log
@@ -2492,7 +2576,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type`) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status`) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -2504,6 +2588,9 @@ INSERT INTO `sys_oper_log` VALUES (4, '流程定义', 1, 'com.ruoyi.project.camu
 INSERT INTO `sys_oper_log` VALUES (5, 'processFormStart', 1, 'com.ruoyi.project.oa.qingjia.controller.OaQingjiaController.processFormStart()', 'POST', 1, 'admin', '研发部门', '/oa/qingjia/processFormStart', '127.0.0.1', '内网IP', '{\"processId\":[\"2022190280303837184\"],\"procInstId\":[\"\"],\"taskId\":[\"\"],\"nextDept\":[\"\"],\"name\":[\"请假1\"],\"day\":[\"3\"],\"quitDate\":[\"2026-01-25\"],\"reason\":[\"qweqwe\"],\"pass\":[\"1\"],\"nextMsg\":[\"sawegf\"],\"btSelectAll\":[\"\"],\"btSelectItem\":[\"\"]}', '{\"msg\":\"操作成功\",\"code\":0}', 0, NULL, '2026-02-13 14:05:52', 593);
 INSERT INTO `sys_oper_log` VALUES (6, 'draft', 2, 'com.ruoyi.project.oa.qingjia.controller.OaQingjiaController.draft()', 'POST', 1, 'admin', '研发部门', '/oa/qingjia/draft', '127.0.0.1', '内网IP', '{\"processId\":[\"2022190280303837184\"],\"procInstId\":[\"0d13517a-08a2-11f1-8c07-0a0027000003\"],\"taskId\":[\"0d5ae1e9-08a2-11f1-8c07-0a0027000003\"],\"nextDept\":[\"\"],\"name\":[\"请假1\"],\"day\":[\"3\"],\"quitDate\":[\"2026-01-25\"],\"reason\":[\"qweqwe1\"],\"pass\":[\"1\"],\"nextMsg\":[\"\"],\"btSelectAll\":[\"\"],\"btSelectItem\":[\"\"]}', '{\"msg\":\"操作成功\",\"code\":0}', 0, NULL, '2026-02-13 14:06:39', 27);
 INSERT INTO `sys_oper_log` VALUES (7, 'processFormEdit', 2, 'com.ruoyi.project.oa.qingjia.controller.OaQingjiaController.processFormEdit()', 'POST', 1, 'admin', '研发部门', '/oa/qingjia/processFormEdit', '127.0.0.1', '内网IP', '{\"processId\":[\"2022190280303837184\"],\"procInstId\":[\"0d13517a-08a2-11f1-8c07-0a0027000003\"],\"taskId\":[\"0d5ae1e9-08a2-11f1-8c07-0a0027000003\"],\"nextDept\":[\"\"],\"name\":[\"请假11\"],\"day\":[\"3\"],\"quitDate\":[\"2026-01-25\"],\"reason\":[\"qweqwe12\"],\"pass\":[\"1\"],\"nextMsg\":[\"\"],\"btSelectAll\":[\"\"],\"btSelectItem\":[\"\"]}', '{\"msg\":\"操作成功\",\"code\":0}', 0, NULL, '2026-02-13 14:07:22', 19);
+INSERT INTO `sys_oper_log` VALUES (8, 'draft', 2, 'com.ruoyi.project.oa.qingjia.controller.OaQingjiaController.draft()', 'POST', 1, 'admin', '研发部门', '/oa/qingjia/draft', '127.0.0.1', '内网IP', '{\"processId\":[\"2022190280303837184\"],\"procInstId\":[\"0d13517a-08a2-11f1-8c07-0a0027000003\"],\"taskId\":[\"0d5ae1e9-08a2-11f1-8c07-0a0027000003\"],\"nextDept\":[\"\"],\"name\":[\"请假11\"],\"day\":[\"3\"],\"quitDate\":[\"2026-01-25\"],\"reason\":[\"qweqwe12\"],\"pass\":[\"1\"],\"nextMsg\":[\"\"],\"btSelectAll\":[\"\"],\"btSelectItem\":[\"\"]}', '{\"msg\":\"操作成功\",\"code\":0}', 0, NULL, '2026-03-25 14:02:54', 155);
+INSERT INTO `sys_oper_log` VALUES (9, '文件记录', 3, 'com.ruoyi.project.system.file.controller.FileController.bizRemove()', 'POST', 1, 'admin', '研发部门', '/system/file/bizRemove', '127.0.0.1', '内网IP', '{\"ids\":[\"2022190458641448960\"]}', '{\"msg\":\"操作成功\",\"code\":0}', 0, NULL, '2026-05-07 15:49:23', 113);
+INSERT INTO `sys_oper_log` VALUES (10, 'draft', 2, 'com.ruoyi.project.oa.qingjia.controller.OaQingjiaController.draft()', 'POST', 1, 'admin', '研发部门', '/oa/qingjia/draft', '127.0.0.1', '内网IP', '{\"processId\":[\"2022190280303837184\"],\"procInstId\":[\"0d13517a-08a2-11f1-8c07-0a0027000003\"],\"taskId\":[\"0d5ae1e9-08a2-11f1-8c07-0a0027000003\"],\"nextDept\":[\"\"],\"name\":[\"请假11\"],\"day\":[\"3\"],\"quitDate\":[\"2026-01-25\"],\"reason\":[\"qweqwe12\"],\"pass\":[\"1\"],\"nextMsg\":[\"\"],\"btSelectAll\":[\"\"],\"btSelectItem\":[\"\"]}', '{\"msg\":\"操作成功\",\"code\":0}', 0, NULL, '2026-05-07 15:50:52', 60);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -2540,7 +2627,7 @@ CREATE TABLE `sys_role`  (
   `role_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色名称',
   `role_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色权限字符串',
   `role_sort` int(4) NOT NULL COMMENT '显示顺序',
-  `data_scope` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '1' COMMENT '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
+  `data_scope` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '1' COMMENT '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）',
   `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色状态（0正常 1停用）',
   `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
   `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
@@ -2738,7 +2825,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '2d1a539d149d81456e97db375413c92e', '07c2aa', '0', '0', '127.0.0.1', '2026-03-19 09:28:09', '2026-02-06 14:08:39', 'admin', '2024-01-15 15:37:17', '', '2026-02-06 14:08:39', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '2d1a539d149d81456e97db375413c92e', '07c2aa', '0', '0', '127.0.0.1', '2026-09-22 14:22:15', '2026-02-06 14:08:39', 'admin', '2024-01-15 15:37:17', '', '2026-02-06 14:08:39', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', 'ry', '00', 'ry@qq.com', '15666666666', '1', '', '8e6d98b90472783cc73c17047ddccf36', '222222', '0', '0', '127.0.0.1', '2026-02-11 10:32:20', NULL, 'admin', '2024-01-15 15:37:17', 'admin', '2026-02-08 17:05:45', '测试员');
 INSERT INTO `sys_user` VALUES (3, NULL, 'leader', '领导', '00', '', '', '0', '', '8634a6021729ed6dd11b9c4ec9dd4a33', '2ea4e2', '0', '0', '127.0.0.1', '2026-02-11 15:22:35', '2026-02-08 17:06:12', 'admin', '2026-02-08 17:06:12', '', NULL, NULL);
 INSERT INTO `sys_user` VALUES (4, NULL, 'ceo', '老板', '00', '', '', '0', '', '2f06928ea032a7ff7043ec3b4d3235bd', 'e6c79a', '0', '0', '127.0.0.1', '2026-02-11 16:02:09', '2026-02-08 17:06:28', 'admin', '2026-02-08 17:06:27', '', NULL, NULL);
@@ -2766,7 +2853,6 @@ CREATE TABLE `sys_user_online`  (
 -- ----------------------------
 -- Records of sys_user_online
 -- ----------------------------
-INSERT INTO `sys_user_online` VALUES ('a25f27f5-0522-4d47-bb35-0b62d4c7e0b6', 'admin', '研发部门', '127.0.0.1', '内网IP', 'Edge 146', 'Windows >=10', 'on_line', '2026-03-19 09:28:04', '2026-03-19 09:49:28', 1800000, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post

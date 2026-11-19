@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.GenConstants;
 import com.ruoyi.common.exception.ServiceException;
@@ -149,18 +149,6 @@ public class GenTableServiceImpl implements IGenTableService
     {
         genTableMapper.deleteGenTableByIds(Convert.toLongArray(ids));
         genTableColumnMapper.deleteGenTableColumnByIds(Convert.toLongArray(ids));
-    }
-
-    /**
-     * 创建表
-     *
-     * @param sql 创建表语句
-     * @return 结果
-     */
-    @Override
-    public boolean createTable(String sql)
-    {
-        return genTableMapper.createTable(sql) == 0;
     }
 
     /**
